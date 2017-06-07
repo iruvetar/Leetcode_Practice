@@ -1,41 +1,32 @@
+import java.util.NoSuchElementException;
 public class Vector2D implements Iterator<Integer> {
-    int rowPointer;
-    int colPointer;
+    int rowPointer, colPointer;
     List<List<Integer>> vector;
     
     public Vector2D(List<List<Integer>> vec2d) {
-        rowPointer = 0;
-        colPointer = 0;
-        vector = vec2d;
+        this.vector = vec2d;
     }
 
     @Override
     public Integer next() {
         if (hasNext()) {
-            int value = vector.get(rowPointer).get(colPointer);
-            if (colPointer + 1 >= vector.get(rowPointer).size()) {
-                rowPointer++;
-                colPointer = 0;
-            } else {
-                colPointer++;
-            }
-            return value;
+            return vector.get(rowPointer).get(colPointer++);
         }
-        return null;
+        throw new NoSuchElementException();
     }
 
     @Override
     public boolean hasNext() {
         while (rowPointer < vector.size()) {
-            if (vector.get(rowPointer).size() == 0) {
-                //skip to next list(row)
-                rowPointer++;
-            } else if (colPointer < vector.get(rowPointer).size()){
+            if (colPointer < vector.get(rowPointer).size()){
                 return true;
             }
+            //when the bottom of current row is reached
+            //skip to next row
+            colPointer = 0;
+            rowPointer++;
         }
         return false;
-
     }
 }
 
