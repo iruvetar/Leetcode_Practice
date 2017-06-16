@@ -1,6 +1,6 @@
 /**
  * I use a HashMap to map the new copied node to the original node.
- * But according to the top solution, I can map the pair of nodes by adding the to the original list.
+ * But I should map the copied node to the original one by appending them on the same list.
  */
 public class Solution {
     public RandomListNode copyRandomList(RandomListNode head) {
