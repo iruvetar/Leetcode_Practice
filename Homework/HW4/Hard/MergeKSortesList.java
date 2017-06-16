@@ -15,8 +15,8 @@ public class Solution {
         while (heap.size() != 0) {
             head.next = heap.poll();
             head = head.next;
-            if (smallest.next != null) {
-                heap.offer(smallest.next);
+            if (head.next != null) {
+                heap.offer(head.next);
             }
         }
         return dummyHead.next;
