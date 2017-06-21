@@ -1,24 +1,45 @@
 /**
- * I use a HashMap to map the new copied node to the original node.
- * But I should map the copied node to the original one by appending them on the same list.
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
  */
 public class Solution {
     public RandomListNode copyRandomList(RandomListNode head) {
-        Map<RandomListNode, RandomListNode> map = new HashMap<RandomListNode, RandomListNode>();
+        if (head == null) return null;
+        
         RandomListNode cur = head;
-        //1st iteration
-        //create new copied nodes, and associate them with their original versioin
+        //first loop: copy the linkedlist, attach the copied node after the original node
         while (cur != null) {
-            map.put(cur, new RandomListNode(cur.label));
-            cur = cur.next;
+            RandomListNode temp = cur.next;
+            cur.next = new RandomListNode(cur.label);
+            cur.next.next = temp;
+            cur = temp;
         }
-        //2nd iteration
+        //second loop: assign the random node for the copied nodes
         cur = head;
         while (cur != null) {
-            map.get(cur).random = map.get(cur.random);
-            map.get(cur).next = map.get(cur.next);
-            cur = cur.next;
+            RandomListNode randomNode = cur.random;
+            cur.next.random = randomNode == null ? null : randomNode.next;
+            cur = cur.next.next;
         }
-        return map.get(head);
+        
+        //third loop: extract the new copy nodes, restore the original list in case we need it
+        //a dummy head for copy list
+        RandomListNode newHead = new RandomListNode(0);
+        RandomListNode copyIter = newHead;
+        cur = head;
+        while (cur != null) {
+            copyIter.next = cur.next;
+            cur.next = cur.next.next;
+            
+            //move the pointer forward
+            cur = cur.next;
+            copyIter = copyIter.next;
+        }
+        
+        return newHead.next;
     }
 }
